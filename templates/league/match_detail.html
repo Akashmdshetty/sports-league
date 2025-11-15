@@ -1,12 +1,14 @@
 {% extends "base.html" %}
 {% block title %}Match{% endblock %}
 {% block content %}
-<div class="card p-4" style="max-width:800px;margin:auto;">
-  <h2>{{ match.home_team }} vs {{ match.away_team }}</h2>
-  <p><strong>Sport:</strong> {{ match.sport.name if match.sport else "—" }}</p>
+<div style="max-width:800px;margin:auto;background:white;padding:16px;border-radius:8px;">
+  <h2>{{ match.home_team.name if match.home_team else "TBD" }} vs {{ match.away_team.name if match.away_team else "TBD" }}</h2>
+
+  <p><strong>Sport:</strong> {% if match.sport %}{{ match.sport.name }}{% else %}—{% endif %}</p>
   <p><strong>Date & Time:</strong> {{ match.date_time }}</p>
   <p><strong>Location:</strong> {{ match.location|default:"—" }}</p>
   <p><strong>Status:</strong> {{ match.get_status_display }}</p>
+
   <p><strong>Score:</strong>
     {% if match.home_score is not None and match.away_score is not None %}
       {{ match.home_score }} — {{ match.away_score }}
@@ -14,6 +16,11 @@
       Not recorded
     {% endif %}
   </p>
+
+  {% if match.notes %}
+    <p><strong>Notes:</strong> {{ match.notes }}</p>
+  {% endif %}
+
   <a class="btn" href="{% url 'matches_list' %}">Back to matches</a>
 </div>
 {% endblock %}

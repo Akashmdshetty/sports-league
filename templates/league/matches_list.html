@@ -1,58 +1,86 @@
 {% extends "base.html" %}
 {% block title %}Matches{% endblock %}
+
 {% block content %}
 <h2 class="mb-3">Matches</h2>
 
-<form method="get" class="mb-3 d-flex gap-2">
-  <select name="sport" class="form-select" style="width:220px;">
-    <option value="">All sports</option>
-    {% for s in sports %}
-      <option value="{{ s.slug }}" {% if selected_sport == s.slug %}selected{% endif %}>{{ s.name }}</option>
-    {% endfor %}
-  </select>
-  <select name="filter" class="form-select" style="width:160px;">
-    <option value="upcoming" {% if filter == "upcoming" %}selected{% endif %}>Upcoming</option>
-    <option value="past" {% if filter == "past" %}selected{% endif %}>Past</option>
-    <option value="all" {% if filter == "all" %}selected{% endif %}>All</option>
-  </select>
+<form method="get" class="mb-3" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+  <label>
+    <select name="sport" style="padding:8px;">
+      <option value="">All sports</option>
+      {% for s in sports %}
+        <option value="{{ s.slug }}" {% if selected_sport == s.slug %}selected{% endif %}>{{ s.name }}</option>
+      {% endfor %}
+    </select>
+  </label>
+
+  <label>
+    <select name="filter" style="padding:8px;">
+      <option value="upcoming" {% if filter == "upcoming" %}selected{% endif %}>Upcoming</option>
+      <option value="past" {% if filter == "past" %}selected{% endif %}>Past</option>
+      <option value="all" {% if filter == "all" %}selected{% endif %}>All</option>
+    </select>
+  </label>
+
   <button class="btn" type="submit">Filter</button>
   <a class="btn" href="{% url 'add_match' %}">Add Match</a>
 </form>
 
-<div class="list-group">
+<div>
   {% for match in page_obj %}
-  <div class="list-group-item">
-    <div class="d-flex justify-content-between">
+    <div style="background:rgba(255,255,255,0.95);padding:12px;margin-bottom:8px;border-radius:6px;display:flex;justify-content:space-between;align-items:center;">
       <div>
-        <strong><a href="{% url 'match_detail' match.pk %}">{{ match.home_team }} vs {{ match.away_team }}</a></strong>
-        <div class="text-muted small">{{ match.date_time }} • {{ match.sport.name if match.sport }}</div>
+        <a href="{% url 'match_detail' match.pk %}">
+          <strong>
+            {% if match.home_team %}
+              {{ match.home_team.name }}
+            {% else %}
+              TBD
+            {% endif %}
+             vs
+            {% if match.away_team %}
+              {{ match.away_team.name }}
+            {% else %}
+              TBD
+            {% endif %}
+          </strong>
+        </a>
+
+        <div style="color:#666;font-size:13px;margin-top:4px;">
+          {{ match.date_time }}
+          {% if match.sport %}
+            • {{ match.sport.name }}
+          {% endif %}
+        </div>
       </div>
-      <div class="text-end">
+
+      <div style="text-align:right;">
         {% if match.home_score is not None and match.away_score is not None %}
-          <span>{{ match.home_score }} — {{ match.away_score }}</span>
+          <strong>{{ match.home_score }} — {{ match.away_score }}</strong>
         {% else %}
-          <small class="text-muted">Not played</small>
+          <span style="color:#888">Not played</span>
         {% endif %}
       </div>
     </div>
-  </div>
   {% empty %}
-    <p>No matches scheduled. <a href="{% url 'add_match' %}">Schedule one</a>.</p>
+    <p>No matches found. <a href="{% url 'add_match' %}">Schedule one</a>.</p>
   {% endfor %}
 </div>
 
-<nav class="mt-4">
-  <ul class="pagination">
+<nav aria-label="Matches pagination" style="margin-top:16px;">
+  <ul style="list-style:none;display:flex;gap:8px;padding:0;align-items:center;">
     {% if page_obj.has_previous %}
-      <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+      <li><a href="?page={{ page_obj.previous_page_number }}{% if selected_sport %}&sport={{ selected_sport }}{% endif %}{% if filter %}&filter={{ filter }}{% endif %}">Previous</a></li>
     {% else %}
-      <li class="page-item disabled"><span class="page-link">Previous</span></li>
+      <li style="color:#999">Previous</li>
     {% endif %}
-    <li class="page-item disabled"><span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span></li>
+
+    <li style="margin:0 12px;color:#555">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</li>
+
     {% if page_obj.has_next %}
-      <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+      <li><a href="?page={{ page_obj.next_page_number }}{% if selected_sport %}&sport={{ selected_sport }}{% endif %}{% if filter %}&filter={{ filter }}{% endif %}">Next</a></li>
     {% else %}
-      <li class="page-item disabled"><span class="page-link">Next</span></li>
+      <li style="color:#999">Next</li>
     {% endif %}
   </ul>
 </nav>

@@ -1,20 +1,53 @@
 {% extends "base.html" %}
 {% block title %}Add Match{% endblock %}
 {% block content %}
-<div class="card p-4" style="max-width:800px;margin:auto;">
+<div style="max-width:800px;margin:auto;background:white;padding:20px;border-radius:8px;">
   <h2>Add Match</h2>
   <form method="post">
     {% csrf_token %}
-    <div class="mb-3">{{ form.sport.label_tag }}{{ form.sport }}</div>
-    <div class="mb-3">{{ form.home_team.label_tag }}{{ form.home_team }}</div>
-    <div class="mb-3">{{ form.away_team.label_tag }}{{ form.away_team }}</div>
-    <div class="mb-3">{{ form.date_time.label_tag }}{{ form.date_time }}</div>
-    <div class="mb-3">{{ form.location.label_tag }}{{ form.location }}</div>
-    <div class="mb-3">{{ form.status.label_tag }}{{ form.status }}</div>
-    <div class="mb-3">{{ form.home_score.label_tag }}{{ form.home_score }}</div>
-    <div class="mb-3">{{ form.away_score.label_tag }}{{ form.away_score }}</div>
-    <button class="btn" type="submit">Save Match</button>
-    <a class="btn" href="{% url 'matches_list' %}">Cancel</a>
+    <div style="margin-bottom:10px;">
+      {{ form.sport.label_tag }}<br/>
+      {{ form.sport }}
+      {{ form.sport.errors }}
+    </div>
+
+    <div style="margin-bottom:10px;">
+      {{ form.home_team.label_tag }}<br/>
+      {{ form.home_team }}
+      {{ form.home_team.errors }}
+    </div>
+
+    <div style="margin-bottom:10px;">
+      {{ form.away_team.label_tag }}<br/>
+      {{ form.away_team }}
+      {{ form.away_team.errors }}
+    </div>
+
+    <div style="margin-bottom:10px;">
+      {{ form.date_time.label_tag }}<br/>
+      {{ form.date_time }}
+      {{ form.date_time.errors }}
+    </div>
+
+    <div style="margin-bottom:10px;">
+      {{ form.location.label_tag }}<br/>
+      {{ form.location }}
+    </div>
+
+    <div style="margin-bottom:10px;">
+      {{ form.status.label_tag }}<br/>
+      {{ form.status }}
+    </div>
+
+    <div style="margin-bottom:10px;display:flex;gap:8px;">
+      <div>{{ form.home_score.label_tag }}<br/>{{ form.home_score }}</div>
+      <div>{{ form.away_score.label_tag }}<br/>{{ form.away_score }}</div>
+    </div>
+
+    <div style="margin-top:12px;">
+      <button class="btn" type="submit">Save Match</button>
+      <a class="btn" href="{% url 'matches_list' %}">Cancel</a>
+    </div>
   </form>
 </div>
 {% endblock %}
