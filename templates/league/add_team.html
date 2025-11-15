@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Add Team{% endblock %}
+{% block content %}
+<div class="card p-4 mx-auto" style="max-width:720px;">
+  <h2 class="mb-3">Add New Team</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label class="form-label">Team name</label>
+      {{ form.name }}
+      {% for e in form.name.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+    </div>
+    <div class="mb-3">
+      <label class="form-label">City</label>
+      {{ form.city }}
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Primary sport (optional)</label>
+      {{ form.sport }}
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Which sports does this team play?</label>
+      {{ form.sports }}
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Logo</label>
+      {{ form.logo }}
+    </div>
+    <button class="btn" type="submit">Save Team</button>
+    <a class="btn" href="{% url 'teams_list' %}">Cancel</a>
+  </form>
+</div>
+{% endblock %}

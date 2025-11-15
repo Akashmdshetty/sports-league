@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Match{% endblock %}
+{% block content %}
+<div class="card p-4" style="max-width:800px;margin:auto;">
+  <h2>{{ match.home_team }} vs {{ match.away_team }}</h2>
+  <p><strong>Sport:</strong> {{ match.sport.name if match.sport else "—" }}</p>
+  <p><strong>Date & Time:</strong> {{ match.date_time }}</p>
+  <p><strong>Location:</strong> {{ match.location|default:"—" }}</p>
+  <p><strong>Status:</strong> {{ match.get_status_display }}</p>
+  <p><strong>Score:</strong>
+    {% if match.home_score is not None and match.away_score is not None %}
+      {{ match.home_score }} — {{ match.away_score }}
+    {% else %}
+      Not recorded
+    {% endif %}
+  </p>
+  <a class="btn" href="{% url 'matches_list' %}">Back to matches</a>
+</div>
+{% endblock %}

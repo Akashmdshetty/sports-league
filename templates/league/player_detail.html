@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}{{ player.first_name }}{% endblock %}
+{% block content %}
+<div class="card p-4" style="max-width:800px;margin:auto;">
+  <h2>{{ player.first_name }}{% if player.last_name %} {{ player.last_name }}{% endif %}</h2>
+  <p><strong>Team:</strong> {% if player.team %}<a href="{% url 'team_detail' player.team.pk %}">{{ player.team.name }}</a>{% else %}—{% endif %}</p>
+  <p><strong>Position:</strong> {{ player.get_position_display }}</p>
+  <p><strong>Number:</strong> {{ player.number|default:"—" }}</p>
+  <p><strong>Nationality:</strong> {{ player.nationality|default:"—" }}</p>
+  <p><strong>Date of birth:</strong> {{ player.date_of_birth|default:"—" }}</p>
+  <a class="btn" href="{% url 'players_list' %}">Back to players</a>
+</div>
+{% endblock %}

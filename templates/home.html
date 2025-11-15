@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Home - Sports League{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>Welcome to Sports League Manager</h1>
+    <p class="subtitle">Manage your teams, players and match schedules with style and ease.</p>
+</div>
+
+<div class="action-cards">
+    <div class="card teams" onclick="location.href='{% url 'add_team' %}'">
+        <div class="card-icon">🏆</div>
+        <h2>Add Team</h2>
+        <p>Create and manage your sports teams with detailed information and statistics.</p>
+    </div>
+
+    <div class="card players" onclick="location.href='{% url 'add_player' %}'">
+        <div class="card-icon">⚡</div>
+        <h2>Add Player</h2>
+        <p>Register new players, track their performance and manage their profiles.</p>
+    </div>
+
+    <div class="card matches" onclick="location.href='{% url 'matches_list' %}'">
+        <div class="card-icon">📅</div>
+        <h2>View Matches</h2>
+        <p>Schedule matches, view upcoming games and track results in real-time.</p>
+    </div>
+</div>
+
+<div class="admin-section">
+    <h3>Advanced Management</h3>
+    <p>For managing data manually, access the comprehensive admin panel below.</p>
+    <button class="btn" onclick="location.href='{% url 'admin:index' %}'">Open Admin Panel</button>
+</div>
+{% endblock %}

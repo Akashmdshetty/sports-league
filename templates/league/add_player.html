@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}Add Player{% endblock %}
+{% block content %}
+<div class="card p-4 mx-auto" style="max-width:900px;">
+  <h2 class="mb-3">Add New Player</h2>
+  <form method="post">
+    {% csrf_token %}
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label">First name</label>
+        {{ form.first_name }}
+        {% for e in form.first_name.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Last name</label>
+        {{ form.last_name }}
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Number</label>
+        {{ form.number }}
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Position</label>
+        {{ form.position }}
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Team</label>
+        <select name="team" id="id_team" class="form-select">
+          <option value="">---------</option>
+          {% for t in teams %}
+            <option value="{{ t.id }}">{{ t.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Date of birth</label>
+        {{ form.date_of_birth }}
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Nationality</label>
+        {{ form.nationality }}
+      </div>
+    </div>
+
+    <div class="mt-4">
+      <button class="btn" type="submit">Save Player</button>
+      <a class="btn" href="{% url 'players_list' %}">Cancel</a>
+    </div>
+  </form>
+</div>
+
+<script>
+  // JS data passed from view
+  const teamSports = {{ team_sports_json|safe }};
+  const sportPositions = {{ sport_positions_json|safe }};
+  const defaultPositions = sportPositions['football'] || [
+    {"code":"GK","label":"Goalkeeper"},
+    {"code":"DF","label":"Defender"},
+    {"code":"MF","label":"Midfielder"},
+    {"code":"FW","label":"Forward"}
+  ];
+
+  // helper to populate position select
+  function populatePositions(selectEl, positions) {
+    selectEl.innerHTML = '';
+    const blank = document.createElement('option');
+    blank.value = '';
+    blank.textContent = '---------';
+    selectEl.appendChild(blank);
+    positions.forEach(item => {
+      const opt = document.createElement('option');
+      opt.value = item.code;
+      opt.textContent = item.label;
+      selectEl.appendChild(opt);
+    });
+  }
+
+  function onTeamChange() {
+    const teamSelect = document.getElementById('id_team');
+    const posSel = document.querySelector('[name="position"]');
+    if (!posSel) return;
+    const teamId = teamSelect.value;
+    if (!teamId) {
+      populatePositions(posSel, defaultPositions);
+      return;
+    }
+    const sports = teamSports[teamId] || [];
+    if (sports.length === 0) {
+      populatePositions(posSel, defaultPositions);
+      return;
+    }
+    const slug = (sports[0] || '').toLowerCase();
+    const positions = sportPositions[slug] || defaultPositions;
+    populatePositions(posSel, positions);
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const teamSelect = document.getElementById('id_team');
+    if (teamSelect) {
+      teamSelect.addEventListener('change', onTeamChange);
+    }
+    onTeamChange();
+  });
+</script>
+{% endblock %}

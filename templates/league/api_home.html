@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}API — Sports League{% endblock %}
+{% block content %}
+<div class="text-center mt-4">
+  <h1>Sports League — API</h1>
+  <p class="lead">Use the links below to browse the web UI or access JSON endpoints.</p>
+
+  <div class="my-3">
+    <a class="btn btn-primary me-2" href="/teams/">Teams (web)</a>
+    <a class="btn btn-primary me-2" href="/players/">Players (web)</a>
+    <a class="btn btn-primary me-2" href="/matches/">Matches (web)</a>
+  </div>
+
+  <h5 class="mt-4">API endpoints (JSON)</h5>
+  <ul class="list-unstyled">
+    <li><a href="{{ teams_url }}">{{ teams_url }}</a></li>
+    <li><a href="{{ players_url }}">{{ players_url }}</a></li>
+    <li><a href="{{ matches_url }}">{{ matches_url }}</a></li>
+  </ul>
+
+  <p class="text-muted mt-3">API clients will receive JSON; this page appears for browsers.</p>
+</div>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}{{ team.name }}{% endblock %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-md-4">
+    <div class="card p-3">
+      {% if team.logo %}
+        <img src="{{ team.logo.url }}" alt="{{ team.name }} logo" class="img-fluid rounded" style="object-fit:cover;height:220px;width:100%">
+      {% else %}
+        <div style="height:220px; display:flex;align-items:center;justify-content:center;background:linear-gradient(90deg,#f0f4ff,#f7fff6);border-radius:6px;">
+          <strong style="font-size:48px;color:#6b85d6">{{ team.name|slice:":1"|upper }}</strong>
+        </div>
+      {% endif %}
+      <h3 class="mt-3 mb-1">{{ team.name }}</h3>
+      {% with sports=team.sports.all %}
+        {% if sports %}
+          <p class="mb-1"><strong>Sports:</strong> {% for s in sports %}{{ s.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+        {% elif team.sport %}
+          <p class="mb-1"><strong>Sport:</strong> {{ team.sport.name }}</p>
+        {% endif %}
+      {% endwith %}
+      {% if team.city %}<p class="mb-1"><strong>City:</strong> {{ team.city }}</p>{% endif %}
+      <p class="small text-muted mt-2">Slug: <code>{{ team.slug }}</code></p>
+      <a class="btn" href="{% url 'teams_list' %}">Back to teams</a>
+    </div>
+  </div>
+
+  <div class="col-md-8">
+    <div class="card p-3">
+      <h4 class="mb-3">Players</h4>
+      {% if players %}
+      <div class="list-group">
+        {% for p in players %}
+        <div class="list-group-item d-flex justify-content-between align-items-center">
+          <div>
+            <strong>{{ p.first_name }}{% if p.last_name %} {{ p.last_name }}{% endif %}</strong>
+            <div class="text-muted small">{{ p.get_position_display }}{% if p.number %} • #{{ p.number }}{% endif %}</div>
+          </div>
+          <div class="text-end small">
+            {% if p.nationality %}<div>{{ p.nationality }}</div>{% endif %}
+            {% if p.date_of_birth %}<div class="text-muted">{{ p.date_of_birth }}</div>{% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+        <p>No players assigned. <a href="{% url 'add_player' %}">Add one</a>.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
